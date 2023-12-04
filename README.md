@@ -4,19 +4,23 @@ Snakeskin is a python cli tool for converting a target photo and an album of pho
 
 ## Installation
 
-pip install .
+`pip install .`
+
+Note: Only tested on Ubuntu 22.04
 
 ## Usage
 
 Minimum inputs:
-snakeskin ./path/to/input_image ./path/to/photos
+
+`snakeskin ./path/to/input_image ./path/to/photos`
 
 Maximum inputs:
-snakeskin ./path/to/input_image ./path/to/photos --method best --scale 1.0 --alpha 0.3 --verbose False --show_lines False --output_directory ./path/to/output_directory
+
+`snakeskin ./path/to/input_image ./path/to/photos --method best --scale 1.0 --alpha 0.3 --verbose False --show_lines False --output_directory ./path/to/output_directory`
 
 This will create two photos.
-- mosaic.png - the final mosaic image
-- side_by_side.png - a side-by-side image comparing the final mosaic image to the original image
+- `mosaic.png` - the final mosaic image
+- `side_by_side.png` - a side-by-side image comparing the final mosaic image to the original image
 
 ## Options
 
