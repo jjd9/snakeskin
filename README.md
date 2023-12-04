@@ -81,6 +81,7 @@ In my opinion, this approach looks the most like an actual mosaic.
 
 ## TODO:
 - [x] Mulithreaded file reading
+- [ ] Testing various input image sizes (so far I mostly tested 3024x4032 images)
 - [ ] Better handling of method-specific parameters
 - [ ] Less naive image database / caching
 - [ ] More mosaic algorithms!
