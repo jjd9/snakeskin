@@ -4,7 +4,7 @@ Snakeskin is a python cli tool for converting a target photo and an album of pho
 
 ## Installation
 
-TODO ...
+pip install .
 
 ## Usage
 
@@ -47,7 +47,7 @@ The defining characteristic of this option is that it will use all the images yo
 
 Note that this method may not produce a mosaic that very closely represents the original image unless you choose a high alpha value for the weighted sum of the original image and raw mosaic. The mosaic similarity will vary depending on how similar your album photos are to the patches in your image, how many album photos you have, and how visually complex the original image is. This may not be the most popular method, but I find it conceptually satisfying to use all the images and still produce something similar-looking.
 
-./photos/all.png
+![All-inclusive Mosaic](photos/all.png)
 
 ### Best-match Mosaic (`best`)
 
@@ -55,7 +55,7 @@ This mosaic algorithm also breaks the image into a uniform grid of patches. Each
 
 This approach benefits from a gpu since faiss benefits gpu acceleration but should be reasonably fast without one.
 
-./photos/best.png
+![Best-match Mosaic](photos/best.png)
 
 ### Quadtree Mosaic (`quad`)
 
@@ -63,7 +63,7 @@ Unlike the first two algorithms, this one does not break the image into a unifor
 
 The quadtree I used was adapted from here: https://github.com/alpharaoh/Quadtree-Compression
 
-./photos/quad.png
+![Quadtree Mosaic](photos/quad.png)
 
 ### Superpixel Mosaic  (`superpixel`)
 
@@ -73,7 +73,7 @@ This method divides the image into regions using superpixel segmentation (https:
   - The mosaic image that is most similar to the superpixel region is transfered to the mosaic image within the superpixel region.
 In my opinion, this approach looks the most like an actual mosaic.
 
-./photos/superpixel.png
+![Superpixel Mosaic](photos/quad.png)
 
 ## TODO:
 - [x] Mulithreaded file reading
