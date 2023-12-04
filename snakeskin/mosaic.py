@@ -44,8 +44,14 @@ class Mosaic:
                 candidate_mosaic_images += glob(os.path.join(album_path, ending))
             candidate_mosaic_images = [(path, (target_width, target_height)) for path in candidate_mosaic_images]
 
+            if self.verbose:
+                print("Start reading images")
+
             with Pool(processes=None) as pool:
                 mosaic_images = pool.map(load_image, candidate_mosaic_images)
+
+            if self.verbose:
+                print("Finshed reading images!")
 
             if self.use_cache:
                 pickle.dump(mosaic_images, open(database_path, "wb"))
@@ -60,12 +66,14 @@ class Mosaic:
 
         # Build mosaic
         raw_mosaic_image = self._create(input_image, mosaic_images, self.show_lines)
+        if raw_mosaic_image.shape != input_image.shape:
+            input_image = cv2.resize(input_image, (raw_mosaic_image.shape[1], raw_mosaic_image.shape[0]), interpolation=cv2.INTER_AREA)
 
         # blend raw mosaic with original image
         mosaic_image = cv2.addWeighted(input_image, self.alpha, raw_mosaic_image, self.beta, 0.0)
         if self.show_lines:
             black_cells = np.all(raw_mosaic_image == 0, axis=2)
-            mosaic_image[black_cells, :] = (0,0,0)
+            mosaic_image[black_cells, :] = (0,0,0)        
         output_mosaic_path = os.path.join(output_path, "mosaic.png")
         cv2.imwrite(output_mosaic_path, mosaic_image)
         merged = cv2.hconcat((input_image, mosaic_image))

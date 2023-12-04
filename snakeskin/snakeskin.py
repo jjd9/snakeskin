@@ -19,7 +19,7 @@ METHOD_MAP = {
 @click.argument('album_path')
 @click.option('--output_path', default='./', help='Directory to save the output images to (it must exist!).')
 @click.option('--method', default='best', help='Mosaic method to use.')
-@click.option('--scale', default=0.1, help='Scale of the mosaic tiles (relative to the input image) for processing.')
+@click.option('--scale', default=0.1, help='Scale of the mosaic tiles (relative to the input image) for processing. It has the most noticeable effect when method==best')
 @click.option('--alpha', default=0.3, help='Weighted given to the input image when computing the final mosaic image.')
 @click.option('--verbose', default=False, help='Whether or not to log information about the mosaic process.')
 @click.option('--show_lines', default=False, help='Whether or not to draw the lines between the mosaic tiles.')

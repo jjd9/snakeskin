@@ -16,15 +16,24 @@ class Best(Mosaic):
         input_height, input_width, _ = input_image.shape
 
         # determine mosaic properties
-        scale = 50 # can be any value (dont make it too large or you run out of memory)
-        mosaic_height = round(input_height / scale)
-        cell_height = int(input_height / mosaic_height)
-        mosaic_width = round(mosaic_height * input_width / input_height)
-        cell_width = int(input_width / mosaic_width)
+        print("Test 1 2 3")
+        cell_height = mosaic_images[0].shape[0]
+        cell_width = mosaic_images[0].shape[1]
+        mosaic_height = round(input_height / cell_height)
+        # force height to be divisible by image height
+        if mosaic_height % input_height != 0:
+           input_height = mosaic_height * round(input_height / mosaic_height)
+
+        mosaic_width = round(input_width / cell_width)
+        # force width to be divisible by image width
+        if mosaic_width % input_width != 0:
+           input_width = mosaic_width * round(input_width / mosaic_width)
+
+        input_image = cv2.resize(input_image, (input_width, input_height), interpolation=cv2.INTER_AREA)
         total_tiles = mosaic_height * mosaic_width
-        scaled_mosaic_images = [cv2.resize(img, (cell_width, cell_height), interpolation=cv2.INTER_AREA) for img in mosaic_images]
 
         if self.verbose:
+            print(f"Input image size: ({input_height}x{input_width})")
             print("Mosaic properties:")
             print(f"Cell dims: ({cell_height}x{cell_width})")
             print(f"Mosaic dims: ({mosaic_height}x{mosaic_width})")
@@ -40,7 +49,7 @@ class Best(Mosaic):
             patch_embeddings[i,:] = get_vec(image_patch).astype(np.float32)
 
         for i in tqdm(range(num_mosaic_images)):
-            mosaic_embeddings[i,:] = get_vec(scaled_mosaic_images[i]).astype(np.float32)
+            mosaic_embeddings[i,:] = get_vec(mosaic_images[i]).astype(np.float32)
 
         if self.verbose:
             print(f"Computing embeddings took: {time.time() - start}")
@@ -63,7 +72,7 @@ class Best(Mosaic):
                 j = I[i,np.random.randint(0,k-1)]
             row = int(i / mosaic_width)
             col = i % mosaic_width
-            raw_mosaic_image[row*cell_height:(row+1)*cell_height, col*cell_width:(col+1)*cell_width, :] = scaled_mosaic_images[j]
+            raw_mosaic_image[row*cell_height:(row+1)*cell_height, col*cell_width:(col+1)*cell_width, :] = mosaic_images[j]
         
         if show_lines:
             for i in range(total_tiles):
