@@ -77,7 +77,7 @@ This method divides the image into regions using superpixel segmentation (https:
   - The mosaic image that is most similar to the superpixel region is transfered to the mosaic image within the superpixel region.
 In my opinion, this approach looks the most like an actual mosaic.
 
-![Superpixel Mosaic](photos/quad.png)
+![Superpixel Mosaic](photos/superpixel.png)
 
 ## TODO:
 - [x] Mulithreaded file reading
