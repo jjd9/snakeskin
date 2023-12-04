@@ -16,7 +16,7 @@ Minimum inputs:
 
 Maximum inputs:
 
-`snakeskin ./path/to/input_image ./path/to/photos --method best --scale 1.0 --alpha 0.3 --verbose False --show_lines False --output_directory ./path/to/output_directory`
+`snakeskin ./path/to/input_image ./path/to/photos --method best --scale 0.1 --alpha 0.3 --verbose False --show_lines False --output_directory ./path/to/output_directory`
 
 This will create two photos.
 - `mosaic.png` - the final mosaic image
