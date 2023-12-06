@@ -6,7 +6,7 @@ Snakeskin is a python cli tool for converting a target photo and an album of pho
 
 `pip install .`
 
-Note: Only tested on Ubuntu 22.04
+Note: Only tested on Ubuntu 22.04. See requirements_versions.txt for the known working versions of the packages.
 
 ## Usage
 
