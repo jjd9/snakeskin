@@ -9,6 +9,7 @@ import os
 import pickle
 import numpy as np
 from multiprocessing import Pool
+from tqdm import tqdm
 
 def load_image(input):
     image_path, target_shape = input
@@ -35,7 +36,9 @@ class Mosaic:
         database_path = os.path.join(album_path, "database.pkl")
         if os.path.exists(database_path) and self.use_cache:
             mosaic_images = pickle.load(open(database_path, "rb"))
-            for i in range(len(mosaic_images)):
+            if self.verbose:
+                print("Scaling mosaic images")
+            for i in tqdm(range(len(mosaic_images))):
                 if mosaic_images[i].shape[1] != target_width or mosaic_images[i].shape[0] != target_height:
                     mosaic_images[i] = cv2.resize(mosaic_images[i], (target_width, target_height), interpolation=cv2.INTER_AREA)
         else:

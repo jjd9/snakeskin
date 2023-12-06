@@ -16,7 +16,7 @@ def cropContour(image, contour_mask, contour_bbox, output_image):
 
     # replace contour with the image
     output_image[...] = 0
-    output_image[y:y+h, x:x+w, :] = cv2.bitwise_and(resized_image, resized_image, contour_mask[y:y+h, x:x+w])
+    output_image[y:y+h, x:x+w, :] = cv2.bitwise_and(resized_image, resized_image, mask=contour_mask[y:y+h, x:x+w])
     return output_image
 
 def f(i):
@@ -47,6 +47,7 @@ class SuperPixel(Mosaic):
         labels = output.getLabels()
         num_labels = output.getNumberOfSuperpixels()
         contour_lines = output.getLabelContourMask()
+        contour_lines = cv2.resize(contour_lines, (original_input_image.shape[1], original_input_image.shape[0]), interpolation=cv2.INTER_NEAREST)
 
         # for each label convert it to a contour, find the mean color, and get the image with the nearest mean
         # color
@@ -94,6 +95,6 @@ class SuperPixel(Mosaic):
                 raw_mosaic_image[resized_label_mask,:] = cropContour(mosaic_images[min_index], resized_contour_mask, resized_contour_bbox, np.zeros_like(raw_mosaic_image))[resized_label_mask,:]
 
         if show_lines:
-            raw_mosaic_image = cv2.bitwise_and(raw_mosaic_image, raw_mosaic_image, ~contour_lines)
+            raw_mosaic_image = cv2.bitwise_and(raw_mosaic_image, raw_mosaic_image, mask=~contour_lines)
 
         return raw_mosaic_image
