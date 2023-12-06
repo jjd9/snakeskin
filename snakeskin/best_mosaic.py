@@ -16,7 +16,6 @@ class Best(Mosaic):
         input_height, input_width, _ = input_image.shape
 
         # determine mosaic properties
-        print("Test 1 2 3")
         cell_height = mosaic_images[0].shape[0]
         cell_width = mosaic_images[0].shape[1]
         mosaic_height = round(input_height / cell_height)

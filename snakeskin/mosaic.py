@@ -20,8 +20,9 @@ def load_image(input):
 
 class Mosaic:
 
-    def __init__(self, scale=1.0, alpha=0.3, use_cache=True, verbose=False, show_lines=False):
-        self.scale=scale
+    def __init__(self, input_image_scale = 1.0, tile_scale=0.01, alpha=0.3, use_cache=True, verbose=False, show_lines=False):
+        self.input_image_scale=input_image_scale
+        self.tile_scale = tile_scale
         self.alpha=alpha
         self.beta=1.0-alpha
         self.use_cache=use_cache
@@ -61,7 +62,9 @@ class Mosaic:
     def create(self, input_image_path, album_path, output_path):
         # Read input images
         input_image = cv2.imread(input_image_path)
-        target_size = (round(input_image.shape[1] * self.scale), round(input_image.shape[0] * self.scale))
+        if self.input_image_scale != 1.0:
+            input_image = cv2.resize(input_image, None, fx=self.input_image_scale, fy=self.input_image_scale, interpolation=cv2.INTER_AREA)
+        target_size = (round(input_image.shape[1] * self.tile_scale), round(input_image.shape[0] * self.tile_scale))
         mosaic_images = self.get_mosaic_images(album_path, target_size)
 
         # Build mosaic

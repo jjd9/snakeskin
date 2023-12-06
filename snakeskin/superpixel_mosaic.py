@@ -60,7 +60,7 @@ class SuperPixel(Mosaic):
 
         for label in tqdm(range(num_labels)):
             label_mask = labels == label
-            patch = input_image[label_mask,:].astype(float)
+            patch = input_image[label_mask,:].astype(int)
 
             # find the contour
             contour_mask = (label_mask.astype(np.uint8) * 255)
