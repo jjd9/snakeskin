@@ -33,6 +33,16 @@ class AssignAll(Mosaic):
         cell_width = int(input_width / mosaic_width)
         num_mosaic_images = mosaic_height * mosaic_width
 
+        # force height to be divisible by image height
+        if cell_height % input_height != 0:
+           input_height = cell_height * int(input_height / cell_height)
+
+        mosaic_width = round(input_width / cell_width)
+        # force width to be divisible by image width
+        if cell_width % input_width != 0:
+           input_width = cell_width * int(input_width / cell_width)
+        input_image = cv2.resize(input_image, (input_width, input_height), interpolation=cv2.INTER_AREA)
+
         scaled_mosaic_images = [cv2.resize(img, (cell_width, cell_height), interpolation=cv2.INTER_AREA) for img in mosaic_images]
 
         if self.verbose:
