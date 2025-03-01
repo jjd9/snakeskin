@@ -16,6 +16,7 @@ def f(work):
     i,j = work
     row = int(i / g_mosaic_width)
     col = i % g_mosaic_width
+    # get the image patch
     image_patch = g_input_image[row*g_cell_height:(row+1)*g_cell_height, col*g_cell_width:(col+1)*g_cell_width, :]
     return calcDistance(image_patch, g_scaled_mosaic_images[j])
 
@@ -32,6 +33,17 @@ class AssignAll(Mosaic):
         mosaic_width = round(mosaic_height * input_width / input_height)
         cell_width = int(input_width / mosaic_width)
         num_mosaic_images = mosaic_height * mosaic_width
+        
+        print("Initial number of images in mosaic: ", len(mosaic_images))
+        if len(mosaic_images) > num_mosaic_images:
+            print("Warning: number of mosaic images is not equal to the number of cells in the mosaic. Truncating mosaic images.")
+            mosaic_images = mosaic_images[:num_mosaic_images]
+        elif len(mosaic_images) < num_mosaic_images:
+            print("Warning: number of mosaic images is not equal to the number of cells in the mosaic. Padding mosaic images with random selection.")
+            difference = num_mosaic_images - len(mosaic_images)
+            for i in range(difference):
+                mosaic_images.append(mosaic_images[np.random.randint(0, len(mosaic_images))])
+        print("Final number of images in mosaic: ", len(mosaic_images))
 
         # force height to be divisible by image height
         if cell_height % input_height != 0:

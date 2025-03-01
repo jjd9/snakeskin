@@ -56,11 +56,30 @@ class Quad(Mosaic):
 
         # construct raw mosaic image
         raw_mosaic_image = np.zeros_like(input_image)
-        k = 1
-        _, I = index.search(np.array(patch_embeddings), k)
+        k = num_mosaic_images
+        used_penalty = {}
+        prevent_image_spam = True
+        D, I = index.search(np.array(patch_embeddings), k)
         for i in tqdm(range(len(leaf_quadrants))):
             quadrant = leaf_quadrants[i]
             j = I[i,0]
+            if prevent_image_spam:
+                # prevent the algorithm from spamming the same image
+                if j in used_penalty:
+                    min_index = -1
+                    min_cost = 1000000000
+                    for k_index in range(k):
+                        if I[i,k_index] not in used_penalty:
+                            j = I[i,k_index]
+                            used_penalty[j] = 0
+                        if used_penalty[I[i,k_index]] + D[i,k_index] < min_cost:
+                            min_index = k_index
+                            min_cost = used_penalty[I[i,min_index]] + D[i,k_index]
+                    j = I[i, min_index]
+                    used_penalty[j] = min_cost
+                else:
+                    used_penalty[j] = D[i,0]
+
             col_min, row_min, col_max, row_max = [int(x) for x in quadrant.bbox]
             raw_mosaic_image[row_min:row_max, col_min:col_max,:] = cv2.resize(mosaic_images[j], (col_max-col_min, row_max-row_min), interpolation=cv2.INTER_AREA)
 

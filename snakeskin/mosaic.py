@@ -42,7 +42,7 @@ class Mosaic:
                 if mosaic_images[i].shape[1] != target_width or mosaic_images[i].shape[0] != target_height:
                     mosaic_images[i] = cv2.resize(mosaic_images[i], (target_width, target_height), interpolation=cv2.INTER_AREA)
         else:
-            filetypes = ["*.jpg", "*.jpeg", "*.png"]
+            filetypes = ["*.jpg", "*.jpeg", "*.png", "*.JPG"]
             candidate_mosaic_images = []
             for ending in filetypes:
                 candidate_mosaic_images += glob(os.path.join(album_path, ending))

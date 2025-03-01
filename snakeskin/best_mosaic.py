@@ -11,7 +11,11 @@ def get_vec(img):
 
 class Best(Mosaic):
 
+
     def _create(self, input_image, mosaic_images, show_lines):        
+        # if true, the algorithm is discouraged from using the same image multiple times
+        prevent_image_spam = True
+
         num_mosaic_images = len(mosaic_images)
         input_height, input_width, _ = input_image.shape
 
@@ -62,13 +66,29 @@ class Best(Mosaic):
 
         # construct raw mosaic image
         raw_mosaic_image = np.zeros_like(input_image)
-        k = 1
-        _, I = index.search(np.array(patch_embeddings), k)
+        # k = num_mosaic_images
+        k = min(100, num_mosaic_images)
+        used_penalty = {}
+        D, I = index.search(np.array(patch_embeddings), k)
         for i in range(total_tiles):
-            if k == 1:
-                j = I[i,0]
-            else:
-                j = I[i,np.random.randint(0,k-1)]
+            j = I[i,0]
+            if prevent_image_spam:
+                # prevent the algorithm from spamming the same image
+                if j in used_penalty:
+                    min_index = -1
+                    min_cost = 1000000000
+                    for k_index in range(k):
+                        if I[i,k_index] not in used_penalty:
+                            j = I[i,k_index]
+                            used_penalty[j] = 0
+                        if used_penalty[I[i,k_index]] + D[i,k_index] < min_cost:
+                            min_index = k_index
+                            min_cost = used_penalty[I[i,min_index]] + D[i,k_index]
+                    j = I[i, min_index]
+                    used_penalty[j] = min_cost
+                else:
+                    used_penalty[j] = D[i,0]
+
             row = int(i / mosaic_width)
             col = i % mosaic_width
             raw_mosaic_image[row*cell_height:(row+1)*cell_height, col*cell_width:(col+1)*cell_width, :] = mosaic_images[j]
